@@ -1,0 +1,45 @@
+<!doctype html>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="codemirror.css">
+<link rel="stylesheet" href="theme/tomorrow-night-bright.css">
+<script src="codemirror.js"></script>
+<script src="mode/javascript.js"></script>
+<script src="addon/active-line.js"></script>
+<style>
+  * {
+    margin: 0;
+  }
+
+  body {
+    background-color: black;
+  }
+
+  #editor {
+    width: 100%;
+  }
+  .CodeMirror {
+    font-size: 14px;
+    height: 100%;
+    line-height: 1em;
+    font-family: monospace;
+    position: relative;
+    overflow: hidden;
+  }
+
+</style>
+<div id="editor"></div>
+
+<script id="script">
+window.onload = function() {
+
+  window.editor = CodeMirror(document.getElementById("editor"), {
+    lineNumbers: false,
+    lineWrapping: true,
+    styleActiveLine: true,
+    mode: "javascript",
+    theme: "tomorrow-night-bright"
+  });
+
+};
+
+</script>
