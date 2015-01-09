@@ -84,7 +84,14 @@ window.onload = function() {
     if(e.which == 10 || e.which == 13) {
       var code = prompt.input.value;
       prompt.input.value = "";
-      var output = eval(code);
+
+      var output;
+      try {
+        output = eval(code);
+      } catch(ex) {
+        output = ex.message;
+      }
+
       prompt.editor.appendLine(code);
       var dump = jsDump.parse(output);
       prompt.editor.appendLine(dump);
