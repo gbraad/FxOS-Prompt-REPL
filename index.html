@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="theme/tomorrow-night-bright.css">
 <script src="codemirror.js"></script>
 <script src="mode/javascript.js"></script>
-<script src="addon/active-line.js"></script>
+<script src="jsdump.js"></script>
 <style>
   * {
     margin: 0;
@@ -14,10 +14,17 @@
     background-color: black;
   }
 
-  #editor {
+  #prompt-editor {
+    /*display: table-cell;*/
     width: 100%;
   }
+
+  #prompt-table {
+    display: table;
+  }
+
   .CodeMirror {
+    display: table-cell;
     font-size: 14px;
     height: 100%;
     line-height: 1em;
@@ -26,20 +33,66 @@
     overflow: hidden;
   }
 
+  #prompt-input-pane {
+    overflow: auto;
+    display: table-cell;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
+  #prompt-input {
+    font-family: monospace;
+    background-color: black;
+    color: white;
+    width: 99%;
+    border: none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+  }
+
+  #prompt-input:focus {
+    outline: none;
+  }
+
 </style>
-<div id="editor"></div>
+
+<div id="prompt-table">
+  <div id="prompt-editor"></div>
+  <div id="prompt-input-pane"><input id="prompt-input"></input></div>
+</div>
 
 <script id="script">
 window.onload = function() {
 
-  window.editor = CodeMirror(document.getElementById("editor"), {
+  prompt.editor = CodeMirror(document.getElementById("prompt-editor"), {
     lineNumbers: false,
     lineWrapping: true,
-    styleActiveLine: true,
+    readOnly: true,
+    scrollbarStyle: null,
     mode: "javascript",
     theme: "tomorrow-night-bright"
   });
 
+  prompt.editor.appendLine = function(text) {
+    prompt.editor.replaceRange(text+"\n", CodeMirror.Pos(prompt.editor.lastLine()));
+  }
+
+  prompt.input = document.getElementById("prompt-input");
+  prompt.input.addEventListener("keypress", function(e) {
+    if(e.which == 10 || e.which == 13) {
+      var code = prompt.input.value;
+      prompt.input.value = "";
+      var output = eval(code);
+      prompt.editor.appendLine(code);
+      var dump = jsDump.parse(output);
+      prompt.editor.appendLine(dump);
+    }
+  });
+
 };
+
+
 
 </script>
