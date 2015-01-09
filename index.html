@@ -2,59 +2,11 @@
 <meta charset="utf-8"/>
 <link rel="stylesheet" href="codemirror.css">
 <link rel="stylesheet" href="theme/tomorrow-night-bright.css">
+<link rel="stylesheet" href="command.css">
 <script src="codemirror.js"></script>
 <script src="mode/javascript.js"></script>
 <script src="jsdump.js"></script>
-<style>
-  * {
-    margin: 0;
-  }
-
-  body {
-    background-color: black;
-  }
-
-  #prompt-editor {
-    width: 100%;
-  }
-
-  #prompt-table {
-    width: 100%;
-    display: table;
-  }
-
-  .CodeMirror {
-    height: 100%;
-    display: table-cell;
-    font-size: 14px;
-    line-height: 1em;
-    font-family: monospace;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 15px;
-  }
-
-  .CodeMirror-scroll {
-    height: auto;
-    overflow: hidden;
-  }
-
-  #prompt-input {
-    font-family: monospace;
-    background-color: #2a2a2a;
-    color: white;
-    width: 99%;
-    border: none;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    appearance:none;
-  }
-
-  #prompt-input:focus {
-    outline: none;
-  }
-
-</style>
+<script src="command.js"></script>
 
 <div id="prompt-table">
   <div id="prompt-editor"></div>
@@ -63,42 +15,6 @@
 
 <script id="script">
 window.onload = function() {
-
-  prompt.editor = CodeMirror(document.getElementById("prompt-editor"), {
-    lineNumbers: false,
-    lineWrapping: true,
-    readOnly: true,
-    scrollbarStyle: null,
-    showCursorWhenSelecting: false,
-    mode: "javascript",
-    theme: "tomorrow-night-bright"
-  });
-
-  prompt.editor.appendLine = function(text) {
-    prompt.editor.replaceRange(text+"\n", CodeMirror.Pos(prompt.editor.lastLine()));
-  }
-
-  prompt.input = document.getElementById("prompt-input");
-  prompt.input.focus();
-  prompt.input.addEventListener("keypress", function(e) {
-    if(e.which == 10 || e.which == 13) {
-      var code = prompt.input.value;
-      prompt.input.value = "";
-
-      var output;
-      try {
-        output = eval(code);
-      } catch(ex) {
-        output = ex.message;
-      }
-
-      prompt.editor.appendLine(code);
-      var dump = jsDump.parse(output);
-      prompt.editor.appendLine(dump);
-      prompt.input.scrollIntoView();
-    }
-  });
-
-};
-
+  prompt.command.setup();
+}
 </script>
